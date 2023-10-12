@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+     
+<h:head><title>Listagem de Jogadas</title></h:head>
+<h:body>
+    <h:form>
+        <p:panel header="Lista de Jogadas">
+            <p:messages id="messages" showDetail="true" closable="true">
+                <p:autoUpdate/>
+            </p:messages>
+            <p:dataTable value="#{jogadaBean.lista}" var="jogada">
+                <p:column headerText="ID"><h:outputText value="#{jogada.id}" /></p:column>
+                <p:column headerText="Jogador 1"><h:outputText value="#{jogada.jogador1}" /></p:column>
+                <p:column headerText="Jogador 2"><h:outputText value="#{jogada.jogador2}" /></p:column>
+                <p:column headerText="Jogada 1"><h:outputText value="#{jogada.jogada1}" /></p:column>
+                <p:column headerText="Jogada 2"><h:outputText value="#{jogada.jogada2}" /></p:column>
+                <p:column headerText="Vencedor(a)"><h:outputText value="#{jogada.resultado}" /></p:column>
+                <p:column headerText="Data"><h:outputText value="#{jogada.data}" /></p:column>
+                <p:column headerText="Editar">
+                    <p:commandButton value="Editar" oncomplete="PF('editarDialog').show();" 
+                                     action="#{jogadaBean.carregarJogadaParaEdicao(jogada.id)}" style="background-color: black; color: white; border: 1px solid black;" />
+               	</p:column>
+                <p:column headerText="Excluir">
+                    <p:commandButton value="Excluir" action="#{jogadaBean.excluirJogada(jogada.id)}" style="background-color: black; color: white; border: 1px solid black;" />
+                </p:column>
+            </p:dataTable>
+            
+            <p:commandButton value="Jogue Novamente" action="index" style="background-color: black; color: white; border: 1px solid black;" />
+        </p:panel>
+    </h:form>
+	<p:dialog id="editarDialog" header="Editar Jogadores" widgetVar="editarDialog" modal="true" resizable="false" dynamic="true">
+    <h:form>
+        <h:panelGrid columns="2">
+            <h:outputLabel value="Jogador 1:  " />
+            <h:inputText value="#{jogadaBean.jogadaEditavel.jogador1}" />
+            <h:outputLabel value="Jogador 2:" />
+            <h:inputText value="#{jogadaBean.jogadaEditavel.jogador2}" />
+        </h:panelGrid>
+        <div style="text-align: center; margin-top: 10px;">
+            <h:commandButton value="Salvar Edições" action="#{jogadaBean.salvarEdicao()}" update="messages jogadasTable" oncomplete="PF('editarDialog').hide();" style="background-color: black; color: white;" />
+        </div>
+    </h:form>
+</p:dialog>
+<p:dataTable value="#{jogadaBean.calcularNumeroJogadas().entrySet()}" var="estatisticas">
+    <p:column headerText="Jogada">
+        <h:outputText value="#{estatisticas.key}" />
+    </p:column>
+    <p:column headerText="Vezes">
+        <h:outputText value="#{estatisticas.value}" />
+    </p:column>
+</p:dataTable>
+</h:body>
+</html>
